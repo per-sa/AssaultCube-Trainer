@@ -7,6 +7,8 @@ namespace eltrainer
         Mem meme = new Mem();
 
         string ammoAddress = "ac_client.exe+0x00195404,140";
+        string pistolAmmoAddress = "ac_client.exe+0x0018AC00, 12C";
+        string grenadeAddress = "ac_client.exe+0x0018AC00, 144";
 
         public Form1()
         {
@@ -32,6 +34,11 @@ namespace eltrainer
                 checkBox1.Checked = !checkBox1.Checked;
             }
 
+            if (keyData == Keys.F2)
+            {
+                checkBox2.Checked = !checkBox2.Checked;
+            }
+
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
@@ -40,6 +47,13 @@ namespace eltrainer
             if (checkBox1.Checked)
             {
                 meme.WriteMemory(ammoAddress, "int", "9999");
+                meme.WriteMemory(pistolAmmoAddress, "int", "9999");
+
+            }
+
+            if (checkBox2.Checked)
+            {
+                meme.WriteMemory(grenadeAddress, "int", "9999");
             }
         }
 
