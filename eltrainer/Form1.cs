@@ -1,4 +1,6 @@
 using Memory;
+using System.Threading;
+using System.Runtime.InteropServices;
 
 namespace eltrainer
 {
@@ -12,6 +14,11 @@ namespace eltrainer
 
         methods? m;
         Entity localPlayer = new Entity();
+        List<Entity> entities = new List<Entity>();
+
+        [DllImport("user32.dll")]
+
+        static extern short GetAsyncKeyState(Keys vKey);
 
         public Form1()
         {
@@ -31,9 +38,45 @@ namespace eltrainer
             CheckForIllegalCrossThreadCalls = false;
             m = new methods();
 
-            localPlayer = m.ReadLocalPLayer();
+            if (m != null)
+            {
+                Thread thread = new Thread(Main) { IsBackground = true };
+                thread.Start();
+            }
+
+
 
             int i = 0;
+        }
+
+        void Main()
+        {
+            while (true)
+            {
+                localPlayer = m.ReadLocalPLayer();
+                entities = m.ReadEntities(localPlayer);
+
+                entities = entities.OrderBy(o => o.mag).ToList();
+
+                if (GetAsyncKeyState(Keys.XButton1)<0)
+                {
+                    if (entities.Count > 0)
+                    {
+                        foreach(var ent in entities)
+                        {
+                            if (ent.team != localPlayer.team)
+                            {
+                                var angles = m.CalcAngles(localPlayer, ent);
+                                m.Aim(localPlayer, angles.X, angles.Y);
+                                break;
+                            }
+                        }
+                    } 
+                }
+
+                Thread.Sleep(20);
+            }
+
         }
 
         //protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
