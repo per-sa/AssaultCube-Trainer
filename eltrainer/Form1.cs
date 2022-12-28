@@ -10,6 +10,9 @@ namespace eltrainer
         string pistolAmmoAddress = "ac_client.exe+0x0018AC00, 12C";
         string grenadeAddress = "ac_client.exe+0x0018AC00, 144";
 
+        methods? m;
+        Entity localPlayer = new Entity();
+
         public Form1()
         {
             InitializeComponent();
@@ -18,43 +21,50 @@ namespace eltrainer
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            int PID = meme.GetProcIdFromName("ac_client.exe");
-            if (PID > 0)
-            {
-                meme.OpenProcess(PID);
-                timer1.Start();
-            }
+            //int PID = meme.GetProcIdFromName("ac_client.exe");
+            //if (PID > 0)
+            //{
+            //    meme.OpenProcess(PID);
+            //    timer1.Start();
+            //}
+
+            CheckForIllegalCrossThreadCalls = false;
+            m = new methods();
+
+            localPlayer = m.ReadLocalPLayer();
+
+            int i = 0;
         }
 
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-        {
+        //protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        //{
 
-            if (keyData == Keys.F1)
-            {
-                checkBox1.Checked = !checkBox1.Checked;
-            }
+            //if (keyData == Keys.F1)
+            //{
+            //    checkBox1.Checked = !checkBox1.Checked;
+            //}
 
-            if (keyData == Keys.F2)
-            {
-                checkBox2.Checked = !checkBox2.Checked;
-            }
+            //if (keyData == Keys.F2)
+            //{
+            //    checkBox2.Checked = !checkBox2.Checked;
+            //}
 
-            return base.ProcessCmdKey(ref msg, keyData);
-        }
+            //return base.ProcessCmdKey(ref msg, keyData);
+        //}
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (checkBox1.Checked)
-            {
-                meme.WriteMemory(ammoAddress, "int", "9999");
-                meme.WriteMemory(pistolAmmoAddress, "int", "9999");
+        //    if (checkBox1.Checked)
+        //    {
+        //        meme.WriteMemory(ammoAddress, "int", "9999");
+        //        meme.WriteMemory(pistolAmmoAddress, "int", "9999");
 
-            }
+        //    }
 
-            if (checkBox2.Checked)
-            {
-                meme.WriteMemory(grenadeAddress, "int", "9999");
-            }
+        //    if (checkBox2.Checked)
+        //    {
+        //        meme.WriteMemory(grenadeAddress, "int", "9999");
+        //    }
         }
 
     }

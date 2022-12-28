@@ -22,7 +22,7 @@ namespace eltrainer
             iDead = 0xB4,
             sName = 0x205,
             iTeam = 0x30C,
-            iCurrentAmmo
+            iCurrentRifleAmmo = 0x140
             ;
     }
 }

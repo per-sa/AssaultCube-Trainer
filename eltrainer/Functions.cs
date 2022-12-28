@@ -26,7 +26,7 @@ namespace eltrainer
 
             ent.baseAddress = entBase;
 
-            ent.currentAmmo = mem.ReadInt(ent.baseAddress, Offsets.iCurrentAmmo);
+            ent.CurrentRifleAmmo = mem.ReadInt(ent.baseAddress, Offsets.iCurrentRifleAmmo);
             ent.health = mem.ReadInt(ent.baseAddress, Offsets.iHealth);
             ent.team = mem.ReadInt(ent.baseAddress, Offsets.iTeam);
 

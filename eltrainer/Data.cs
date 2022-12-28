@@ -13,7 +13,7 @@ namespace eltrainer
         public Vector3 feet, head;
         public Vector2 viewAngles;
         public float mag, viewOffest;
-        public int health, team, currentAmmo, dead;
+        public int health, team, CurrentRifleAmmo, dead;
         public string name;
     }
 
