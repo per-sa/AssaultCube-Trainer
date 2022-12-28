@@ -101,6 +101,85 @@ namespace eltrainer
                 );
         }
 
+        public Rectangle CalcRect(Point feet, Point head)
+        {
+            var rect = new Rectangle();
+
+            rect.X = head.X - (feet.Y - head.Y) / 4;
+            rect.Y = head.Y;
+
+            rect.Width = (feet.Y - head.Y) / 2;
+            rect.Height = feet.Y - head.Y;
+
+            return rect;
+
+        }
+
+        public Point WorldToScreen(ViewMatrix mtx, Vector3 pos, int width, int height)
+        {
+
+            var twoD = new Point();
+
+            float screenW = (mtx.m14 * pos.X) + (mtx.m24 * pos.Y) + (mtx.m34* pos.Z) + mtx.m44;
+
+            if (screenW > 0.001f)
+            {
+                float screenX = (mtx.m11 * pos.X) + (mtx.m21 * pos.Y) + (mtx.m31 * pos.Z) + mtx.m41;
+
+                float screenY = (mtx.m12 * pos.X) + (mtx.m22 * pos.Y) + (mtx.m32 * pos.Z) + mtx.m42;
+
+
+                float camX = width / 2f;
+                float camY = height / 2f;
+
+                float X = camX + (camX * screenX / screenW);
+                float Y = camY - (camY * screenY / screenW);
+
+                twoD.X = (int)X;
+                twoD.Y = (int)Y;
+
+                return twoD;
+
+            }
+
+            else
+            {
+                return new Point(-99, -99);
+            }
+
+
+
+        }
+
+
+        public ViewMatrix ReadMatrix()
+        {
+            var viewMatrix = new ViewMatrix();
+            var mtx = mem.ReadMatrix(moduleBase + Offsets.iViewMatrix);
+
+            viewMatrix.m11 = mtx[0];
+            viewMatrix.m12 = mtx[1];
+            viewMatrix.m13 = mtx[2];
+            viewMatrix.m14 = mtx[3];
+
+            viewMatrix.m21 = mtx[4];
+            viewMatrix.m22 = mtx[5];
+            viewMatrix.m23 = mtx[6];
+            viewMatrix.m24 = mtx[7];
+
+            viewMatrix.m31 = mtx[8];
+            viewMatrix.m32 = mtx[9];
+            viewMatrix.m33 = mtx[10];
+            viewMatrix.m34 = mtx[11];
+
+            viewMatrix.m41 = mtx[12];
+            viewMatrix.m42 = mtx[13];
+            viewMatrix.m43 = mtx[14];
+            viewMatrix.m44 = mtx[15];
+
+            return viewMatrix; 
+        }
+
 
         public methods()
         {

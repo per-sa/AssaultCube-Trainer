@@ -1,11 +1,15 @@
 using Memory;
 using System.Threading;
 using System.Runtime.InteropServices;
+using ezOverLay;
 
 namespace eltrainer
 {
     public partial class Form1 : Form
     {
+
+        ez ez = new ez();
+
         Mem meme = new Mem();
 
         string ammoAddress = "ac_client.exe+0x00195404,140";
@@ -40,6 +44,9 @@ namespace eltrainer
 
             if (m != null)
             {
+                ez.SetInvi(this);
+                ez.DoStuff("AssaultCube", this);
+
                 Thread thread = new Thread(Main) { IsBackground = true };
                 thread.Start();
             }
@@ -73,6 +80,9 @@ namespace eltrainer
                         }
                     } 
                 }
+
+                Form1 f = this;
+                f.Refresh();
 
                 Thread.Sleep(20);
             }
@@ -110,5 +120,33 @@ namespace eltrainer
         //    }
         }
 
+        private void Form1_Paint(object sender, PaintEventArgs e)
+        {
+            Graphics g = e.Graphics;
+            Pen red = new Pen(Color.Red, 3);
+            Pen green = new Pen(Color.Green, 3);
+
+            foreach(var ent in entities.ToList())
+            {
+                var wtsFeet = m.WorldToScreen(m.ReadMatrix(), ent.feet, this.Width, this.Height);
+                var wtsHead = m.WorldToScreen(m.ReadMatrix(), ent.head, this.Width, this.Height);
+
+                if (wtsFeet.X > 0)
+                {
+                    if (localPlayer.team == ent.team)
+                    {
+                        g.DrawLine(green, new Point(Width / 2, Height), wtsFeet);
+                        g.DrawRectangle(green, m.CalcRect(wtsFeet, wtsHead));
+                    }
+
+                    else
+                    {
+                        g.DrawLine(red, new Point(Width / 2, Height), wtsFeet);
+                        g.DrawRectangle(red, m.CalcRect(wtsFeet, wtsHead));
+
+                    }
+                }
+            }
+        }
     }
 }
